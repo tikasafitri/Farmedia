@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -61,4 +62,33 @@ class AdminOrderController extends Controller
         $order->load(['user','mitra','items.product']);
         return view('admin.orders.print_resi', compact('order'));
     }
+
+    public function approveTransfer(Order $order)
+{
+    // hanya untuk transfer
+    if ($order->metode_pembayaran !== 'transfer') {
+        return back()->with('error', 'Metode pembayaran bukan transfer.');
+    }
+
+    // harus ada bukti
+    if (empty($order->payment_proof) && empty($order->payment_proof_path)) {
+        return back()->with('error', 'Bukti transfer belum ada.');
+    }
+
+    // harus waiting_verification
+    if ($order->payment_status !== 'waiting_verification') {
+        return back()->with('error', 'Status pembayaran tidak valid untuk approve.');
+    }
+
+    DB::transaction(function () use ($order) {
+        $order->update([
+            'payment_status' => 'paid',
+            'paid_at'        => now(),
+        ]);
+
+        // kalau kamu punya logika escrow/komisi, taruh di sini nanti
+    });
+
+    return back()->with('success', 'Pembayaran transfer disetujui. Status menjadi PAID.');
+}
 }

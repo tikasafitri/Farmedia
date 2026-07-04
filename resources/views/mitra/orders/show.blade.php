@@ -19,9 +19,10 @@
     <div class="py-6">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-5">
 
-            {{-- STATUS --}}
             @php
-                $status = $order->status_order;
+                // Normalisasi status lama (UI only)
+                $status = $order->status_order === 'confirmed' ? 'diproses' : $order->status_order;
+
                 $statusLabel = [
                     'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
                     'diproses'            => 'Diproses',
@@ -43,8 +44,45 @@
                     'pending_cancel' => 'bg-orange-50 text-orange-700 border-orange-100',
                     default     => 'bg-slate-50 text-slate-700 border-slate-200',
                 };
+
+                // Escrow transfer lock: mitra hanya boleh proses kalau admin sudah approve (paid)
+                $isTransfer = ($order->metode_pembayaran === 'transfer');
+                $payStatus  = $order->payment_status ?? 'pending'; // fallback aman
+                $hasProof   = !empty($order->payment_proof); // sesuai struktur DB kamu: payment_proof
+                $lockedByEscrow = $isTransfer && ($payStatus !== 'paid');
+
+                // Pesan status escrow untuk UI
+                $payLabel = match($payStatus) {
+                    'pending' => 'PENDING (Belum upload bukti)',
+                    'waiting_verification' => 'MENUNGGU VERIFIKASI ADMIN',
+                    'paid' => 'PAID (Sudah diverifikasi)',
+                    'failed' => 'GAGAL',
+                    'expired' => 'KADALUARSA',
+                    default => strtoupper($payStatus),
+                };
+
+                $payBadgeCls = match($payStatus) {
+                    'paid' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                    'waiting_verification' => 'bg-amber-50 text-amber-700 border-amber-200',
+                    'failed','expired' => 'bg-rose-50 text-rose-700 border-rose-200',
+                    default => 'bg-slate-50 text-slate-700 border-slate-200',
+                };
             @endphp
 
+                @if(session('success'))
+    <div class="p-3 rounded-xl bg-emerald-50 text-emerald-700 text-sm border border-emerald-100">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="p-3 rounded-xl bg-rose-50 text-rose-700 text-sm border border-rose-100">
+        {{ session('error') }}
+    </div>
+@endif
+
+
+            {{-- STATUS HEADER --}}
             <div class="bg-white border border-emerald-50 shadow-sm rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <p class="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
@@ -71,163 +109,196 @@
                     <p>Metode Pembayaran: <span class="font-medium text-gray-700">{{ strtoupper($order->metode_pembayaran) }}</span></p>
                     <p>Total Dibayar:
                         <span class="font-semibold text-emerald-700">
-                            Rp {{ number_format($order->total_harga, 0, ',', '.') }}
+                            Rp {{ number_format((float)$order->total_harga, 0, ',', '.') }}
                         </span>
                     </p>
                 </div>
             </div>
 
-{{-- AKSI PENJUAL --}}
-<div class="bg-white border border-emerald-50 shadow-sm rounded-2xl p-5">
-    <h3 class="text-sm font-semibold text-gray-800 mb-3">Aksi Penjual</h3>
+            {{-- INFO ESCROW TRANSFER (sinkron) --}}
+            @if($isTransfer)
+                <div class="bg-white border border-emerald-50 shadow-sm rounded-2xl p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-semibold tracking-wide text-emerald-700 uppercase">
+                                Pembayaran Transfer (Escrow Platform)
+                            </p>
+                            <p class="mt-2 text-sm text-gray-700">
+                                Status pembayaran:
+                                <span class="inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold {{ $payBadgeCls }}">
+                                    {{ $payLabel }}
+                                </span>
+                            </p>
 
-    @if ($order->status_order === 'pending_cancel')
-        <p class="text-sm text-gray-500 mb-3">
-            Pembeli sedang mengajukan <span class="font-semibold">pembatalan pesanan</span>.
-            Silakan pilih apakah ingin menyetujui atau menolak.
-        </p>
+                            @if($hasProof)
+                                <p class="mt-2 text-sm text-gray-700">
+                                    Bukti transfer:
+                                    <a class="text-emerald-700 underline" target="_blank"
+                                       href="{{ asset('storage/' . $order->payment_proof) }}">
+                                        Lihat file
+                                    </a>
+                                </p>
+                            @else
+                                <p class="mt-2 text-sm text-gray-500">
+                                    Bukti transfer: <span class="font-medium">Belum ada</span>
+                                </p>
+                            @endif
+                        </div>
 
-        <div class="bg-orange-50 border border-orange-200 rounded-2xl px-5 py-4">
-            <p class="font-semibold text-orange-800 text-sm">
-                Pembeli mengajukan pembatalan pesanan.
-            </p>
-
-            <div class="mt-3 flex flex-col sm:flex-row gap-2">
-                <form action="{{ route('mitra.orders.cancel.approve', $order->id) }}" method="POST">
-                    @csrf
-                    <button class="w-full sm:w-auto px-4 py-2 rounded-full bg-rose-600 text-white text-sm font-medium hover:bg-rose-700">
-                        Setujui Pembatalan
-                    </button>
-                </form>
-
-                <form action="{{ route('mitra.orders.cancel.reject', $order->id) }}" method="POST">
-                    @csrf
-                    <button class="w-full sm:w-auto px-4 py-2 rounded-full border border-emerald-600 bg-white text-sm font-medium text-emerald-700 hover:bg-emerald-50">
-                        Tolak Pembatalan
-                    </button>
-                </form>
-            </div>
-        </div>
-
-    @elseif(in_array($order->status_order, ['selesai','rejected','dibatalkan']))
-        <p class="text-sm text-gray-500">
-            Tidak ada aksi. Pesanan sudah <span class="font-semibold">{{ strtolower($statusLabel) }}</span>.
-        </p>
-
-    @else
-        {{-- AKSI NORMAL --}}
-        <div class="space-y-3">
-
-            {{-- MODE PICKUP --}}
-            @if($order->metode_pengiriman === 'pickup')
-
-                @if($order->status_order === 'menunggu_konfirmasi')
-                    <form method="POST" action="{{ route('mitra.orders.confirm', $order->id) }}">
-                        @csrf
-                        <button class="px-5 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
-                            Konfirmasi Pesanan
-                        </button>
-                    </form>
-
-                @elseif($order->status_order === 'diproses')
-                    <form method="POST" action="{{ route('mitra.orders.readyPickup', $order->id) }}">
-                        @csrf
-                        <button class="px-5 py-2.5 rounded-full bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700">
-                            Tandai Siap Diambil
-                        </button>
-                    </form>
-
-                @elseif($order->status_order === 'siap_diambil')
-                    <form method="POST" action="{{ route('mitra.orders.finish', $order->id) }}">
-                        @csrf
-                        <button class="px-5 py-2.5 rounded-full bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700">
-                            Tandai Sudah Diambil
-                        </button>
-                    </form>
-                @endif
-
-            {{-- MODE DELIVERY --}}
-            @else
-
-                @if($order->status_order === 'menunggu_konfirmasi')
-                    <form method="POST" action="{{ route('mitra.orders.confirm', $order->id) }}">
-                        @csrf
-                        <button class="px-5 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
-                            Konfirmasi Pesanan
-                        </button>
-                    </form>
-
-                @elseif($order->status_order === 'diproses')
-                    <form method="POST" action="{{ route('mitra.orders.pack', $order->id) }}">
-                        @csrf
-                        <button class="px-5 py-2.5 rounded-full bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700">
-                            Tandai Dikemas
-                        </button>
-                    </form>
-
-                @elseif($order->status_order === 'dikemas')
-                    <form method="POST" action="{{ route('mitra.orders.readyShip', $order->id) }}">
-                        @csrf
-                        <button class="px-5 py-2.5 rounded-full bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700">
-                            Pesanan Siap Dikirim
-                        </button>
-                    </form>
-
-                @elseif($order->status_order === 'siap_dikirim')
-    <div class="space-y-2">
-        <p class="text-sm text-gray-500">
-            Pesanan sudah siap dikirim. Kamu bisa cetak resi untuk ditempel pada paket.
-        </p>
-
-        <a href="{{ route('mitra.orders.printResi', $order->id) }}"
-           target="_blank"
-           class="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-50">
-            🧾 Cetak Resi
-        </a>
-    </div>
-
-@elseif($order->status_order === 'dikirim')
-    <div class="space-y-2">
-        <p class="text-sm text-gray-500">
-            Pesanan sudah dikirim. Resi masih bisa dicetak ulang jika diperlukan.
-        </p>
-
-        <a href="{{ route('mitra.orders.printResi', $order->id) }}"
-           target="_blank"
-           class="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-50">
-            🧾 Cetak Resi
-        </a>
-    </div>
-@endif
-
-            @endif
-
-            {{-- TOMBOL KONFIRMASI PEMBAYARAN (TRANSFER) --}}
-            @if(
-                $order->metode_pembayaran === 'transfer'
-                && $order->payment_status === 'pending'
-                && in_array($order->status_order, ['menunggu_konfirmasi', 'diproses'])
-            )
-                <div class="mt-4 border-t border-dashed border-gray-200 pt-4">
-                    <p class="text-xs text-gray-500 mb-2">
-                        Pembeli memilih <span class="font-semibold">Transfer Bank</span>.
-                        Klik tombol di bawah kalau pembayaran sudah diterima.
-                    </p>
-
-                    <form action="{{ route('mitra.orders.confirmPayment', $order->id) }}"
-                          method="POST"
-                          onsubmit="return confirm('Konfirmasi pembayaran untuk pesanan ini?')">
-                        @csrf
-                        <button class="px-4 py-2 text-xs rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700">
-                            Konfirmasi Pembayaran
-                        </button>
-                    </form>
+                        @if($lockedByEscrow)
+                            <div class="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800 text-sm">
+                                <b>Aksi mitra dikunci</b> sampai admin memverifikasi pembayaran (status <b>PAID</b>).
+                                <div class="text-xs mt-1 text-amber-800/80">
+                                    @if($payStatus === 'pending')
+                                        Pembeli belum upload bukti transfer.
+                                    @elseif($payStatus === 'waiting_verification')
+                                        Pembeli sudah upload bukti, menunggu admin approve.
+                                    @else
+                                        Menunggu status pembayaran valid.
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             @endif
 
-        </div>
-    @endif
-</div>
+            {{-- AKSI PENJUAL --}}
+            <div class="bg-white border border-emerald-50 shadow-sm rounded-2xl p-5">
+                <h3 class="text-sm font-semibold text-gray-800 mb-3">Aksi Penjual</h3>
+
+                {{-- Jika escrow lock aktif, tampilkan saja info (tanpa tombol proses) --}}
+                @if($lockedByEscrow)
+                    <p class="text-sm text-gray-600">
+                        Tidak ada aksi saat ini. Tunggu admin menyetujui pembayaran transfer.
+                    </p>
+
+                @else
+
+                    @if ($order->status_order === 'pending_cancel')
+                        <p class="text-sm text-gray-500 mb-3">
+                            Pembeli sedang mengajukan <span class="font-semibold">pembatalan pesanan</span>.
+                            Silakan pilih apakah ingin menyetujui atau menolak.
+                        </p>
+
+                        <div class="bg-orange-50 border border-orange-200 rounded-2xl px-5 py-4">
+                            <p class="font-semibold text-orange-800 text-sm">
+                                Pembeli mengajukan pembatalan pesanan.
+                            </p>
+
+                            <div class="mt-3 flex flex-col sm:flex-row gap-2">
+                                <form action="{{ route('mitra.orders.cancel.approve', $order->id) }}" method="POST">
+                                    @csrf
+                                    <button class="w-full sm:w-auto px-4 py-2 rounded-full bg-rose-600 text-white text-sm font-medium hover:bg-rose-700">
+                                        Setujui Pembatalan
+                                    </button>
+                                </form>
+
+                                <form action="{{ route('mitra.orders.cancel.reject', $order->id) }}" method="POST">
+                                    @csrf
+                                    <button class="w-full sm:w-auto px-4 py-2 rounded-full border border-emerald-600 bg-white text-sm font-medium text-emerald-700 hover:bg-emerald-50">
+                                        Tolak Pembatalan
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    @elseif(in_array($order->status_order, ['selesai','rejected','dibatalkan'], true))
+                        <p class="text-sm text-gray-500">
+                            Tidak ada aksi. Pesanan sudah <span class="font-semibold">{{ strtolower($statusLabel) }}</span>.
+                        </p>
+
+                    @else
+                        <div class="space-y-3">
+
+                            {{-- MODE PICKUP --}}
+                            @if($order->metode_pengiriman === 'pickup')
+
+                                @if($order->status_order === 'menunggu_konfirmasi' || $order->status_order === 'confirmed')
+                                    <form method="POST" action="{{ route('mitra.orders.confirm', $order->id) }}">
+                                        @csrf
+                                        <button class="px-5 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
+                                            Konfirmasi Pesanan
+                                        </button>
+                                    </form>
+
+                                @elseif($order->status_order === 'diproses')
+                                    <form method="POST" action="{{ route('mitra.orders.readyPickup', $order->id) }}">
+                                        @csrf
+                                        <button class="px-5 py-2.5 rounded-full bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700">
+                                            Tandai Siap Diambil
+                                        </button>
+                                    </form>
+
+                                @elseif($order->status_order === 'siap_diambil')
+                                    <form method="POST" action="{{ route('mitra.orders.finish', $order->id) }}">
+                                        @csrf
+                                        <button class="px-5 py-2.5 rounded-full bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700">
+                                            Tandai Sudah Diambil
+                                        </button>
+                                    </form>
+                                @endif
+
+                            {{-- MODE DELIVERY --}}
+                            @else
+
+                                @if($order->status_order === 'menunggu_konfirmasi' || $order->status_order === 'confirmed')
+                                    <form method="POST" action="{{ route('mitra.orders.confirm', $order->id) }}">
+                                        @csrf
+                                        <button class="px-5 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
+                                            Konfirmasi Pesanan
+                                        </button>
+                                    </form>
+
+                                @elseif($order->status_order === 'diproses')
+                                    <form method="POST" action="{{ route('mitra.orders.pack', $order->id) }}">
+                                        @csrf
+                                        <button class="px-5 py-2.5 rounded-full bg-sky-600 text-white text-sm font-semibold hover:bg-sky-700">
+                                            Tandai Dikemas
+                                        </button>
+                                    </form>
+
+                                @elseif($order->status_order === 'dikemas')
+                                    <form method="POST" action="{{ route('mitra.orders.readyShip', $order->id) }}">
+                                        @csrf
+                                        <button class="px-5 py-2.5 rounded-full bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700">
+                                            Pesanan Siap Dikirim
+                                        </button>
+                                    </form>
+
+                                @elseif($order->status_order === 'siap_dikirim')
+                                    <div class="space-y-2">
+                                        <p class="text-sm text-gray-500">
+                                            Pesanan sudah siap dikirim. Kamu bisa cetak resi untuk ditempel pada paket.
+                                        </p>
+
+                                        <a href="{{ route('mitra.orders.printResi', $order->id) }}"
+                                           target="_blank"
+                                           class="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-50">
+                                            🧾 Cetak Resi
+                                        </a>
+                                    </div>
+
+                                @elseif($order->status_order === 'dikirim')
+                                    <div class="space-y-2">
+                                        <p class="text-sm text-gray-500">
+                                            Pesanan sudah dikirim. Resi masih bisa dicetak ulang jika diperlukan.
+                                        </p>
+
+                                        <a href="{{ route('mitra.orders.printResi', $order->id) }}"
+                                           target="_blank"
+                                           class="inline-flex items-center justify-center rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-50">
+                                            🧾 Cetak Resi
+                                        </a>
+                                    </div>
+                                @endif
+
+                            @endif
+                        </div>
+                    @endif
+
+                @endif
+            </div>
 
             {{-- GRID INFO UTAMA --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -278,14 +349,14 @@
 
                     @php
                         $totalProduk = $order->items->sum('subtotal');
-                        $ongkir = $order->ongkir ?? 0;
+                        $ongkir = (float)($order->ongkir ?? 0);
                     @endphp
 
                     <dl class="space-y-2 text-sm">
                         <div class="flex justify-between">
                             <dt class="text-gray-500">Total Harga Produk</dt>
                             <dd class="font-medium text-gray-800">
-                                Rp {{ number_format($totalProduk, 0, ',', '.') }}
+                                Rp {{ number_format((float)$totalProduk, 0, ',', '.') }}
                             </dd>
                         </div>
                         <div class="flex justify-between">
@@ -298,7 +369,7 @@
                         <div class="flex justify-between items-center">
                             <dt class="text-gray-600 font-semibold">Total Dibayar</dt>
                             <dd class="text-lg font-extrabold text-emerald-700">
-                                Rp {{ number_format($order->total_harga, 0, ',', '.') }}
+                                Rp {{ number_format((float)$order->total_harga, 0, ',', '.') }}
                             </dd>
                         </div>
                     </dl>
@@ -320,16 +391,20 @@
                 <div class="divide-y divide-gray-100">
                     @foreach($order->items as $item)
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4 py-3">
-                            <div class="flex items-center gap-3 flex-1">
-                                <img src="{{ asset('storage/' . $item->product->foto_produk) }}"
-                                     class="w-16 h-16 rounded-lg object-cover border border-gray-100">
+                            <div class="flex items-center gap-3 flex-1 min-w-0">
+                                <img
+                                    src="{{ asset('storage/' . ($item->product->foto_produk ?? '')) }}"
+                                    class="w-16 h-16 rounded-lg object-cover border border-gray-100"
+                                    alt="Produk"
+                                    onerror="this.style.display='none';"
+                                >
 
-                                <div>
-                                    <p class="font-semibold text-gray-800">
-                                        {{ $item->product->nama_produk }}
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-gray-800 truncate">
+                                        {{ $item->product->nama_produk ?? 'Produk dihapus' }}
                                     </p>
                                     <p class="text-xs text-gray-500">
-                                        {{ $item->jumlah }} × Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}
+                                        {{ (int)$item->jumlah }} × Rp {{ number_format((float)$item->harga_satuan, 0, ',', '.') }}
                                     </p>
                                 </div>
                             </div>
@@ -337,14 +412,13 @@
                             <div class="sm:text-right">
                                 <p class="text-xs text-gray-500">Subtotal</p>
                                 <p class="font-semibold text-emerald-700">
-                                    Rp {{ number_format($item->subtotal, 0, ',', '.') }}
+                                    Rp {{ number_format((float)$item->subtotal, 0, ',', '.') }}
                                 </p>
                             </div>
                         </div>
                     @endforeach
                 </div>
             </div>
-
 
         </div>
     </div>

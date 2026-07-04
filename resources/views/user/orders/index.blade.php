@@ -99,7 +99,7 @@
 
                                 // ambil nama toko dari item pertama (kalau ada)
                                 $firstItem = $order->items->first();
-                                $shopName = optional(optional($firstItem)->product->mitra)->nama_toko ?? 'Mitra Farmedia';
+                                $shopName  = $firstItem?->product?->mitra?->nama_toko ?? 'Mitra Farmedia';
 
                                 $orderCode = 'FM-' . str_pad($order->id, 5, '0', STR_PAD_LEFT);
                             @endphp

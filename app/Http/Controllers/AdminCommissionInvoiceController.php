@@ -43,7 +43,9 @@ class AdminCommissionInvoiceController extends Controller
 
             // semua order di invoice -> komisi_lunas = true
             $orderIds = $invoice->orders()->pluck('orders.id')->all();
-            \App\Models\Order::whereIn('id', $orderIds)->update(['komisi_lunas' => true]);
+            \App\Models\Order::whereIn('id', $orderIds)->update([
+                'komisi_lunas_at' => now(),
+                ]);
         });
 
         return redirect()->route('admin.commission_invoices.index', ['status' => 'waiting_verification'])

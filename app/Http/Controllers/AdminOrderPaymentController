@@ -1,0 +1,45 @@
+<?php
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Illuminate\Support\Facades\DB;
+
+class AdminOrderPaymentController extends Controller
+{
+    public function approveTransfer(Order $order)
+    {
+        if ($order->metode_pembayaran !== 'transfer') {
+            return back()->with('error', 'Bukan pembayaran transfer.');
+        }
+
+        if ($order->payment_status !== 'waiting_verification') {
+            return back()->with('error', 'Order tidak dalam status menunggu verifikasi.');
+        }
+
+        if (empty($order->payment_proof_path)) {
+            return back()->with('error', 'Bukti transfer belum ada.');
+        }
+
+        DB::transaction(function () use ($order) {
+
+            // 1) mark paid
+            $order->update([
+                'payment_status' => 'paid',
+                'paid_at'        => now(),
+            ]);
+
+            // 2) catat uang masuk ke platform (escrow)
+            DB::table('platform_transactions')->insert([
+                'order_id'    => $order->id,
+                'type'        => 'escrow_in',
+                'amount'      => (float) $order->total_harga,
+                'notes'       => 'Pembayaran transfer masuk escrow',
+                'created_at'  => now(),
+                'updated_at'  => now(),
+            ]);
+        });
+
+        return back()->with('success', 'Pembayaran transfer disetujui. Uang masuk ke escrow platform.');
+    }
+}

@@ -18,6 +18,7 @@ use App\Http\Controllers\AdminCommissionInvoiceController;
 use App\Http\Controllers\MitraReviewController;
 use App\Http\Controllers\AdminAdSubmissionController;
 use App\Http\Controllers\MitraAdSubmissionController;
+use App\Http\Controllers\Admin\AdminOrderPaymentController;
 use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\MitraProfileController;
 use App\Http\Controllers\CartController;
@@ -228,7 +229,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // DI DALAM group ->prefix('admin')->name('admin.')
 Route::prefix('transaksi-cod')->name('cod.')->group(function () {
     Route::get('/', [\App\Http\Controllers\AdminCodController::class, 'index'])->name('index');
-
+  
     Route::post('/{order}/receive', [\App\Http\Controllers\AdminCodController::class, 'receive'])->name('receive');
     Route::post('/{order}/deduct', [\App\Http\Controllers\AdminCodController::class, 'deduct'])->name('deduct');
     Route::post('/{order}/pay', [\App\Http\Controllers\AdminCodController::class, 'pay'])->name('pay');
@@ -257,6 +258,7 @@ Route::prefix('transaksi-cod')->name('cod.')->group(function () {
             Route::get('/pesanan/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
             Route::post('/pesanan/{order}/finish', [AdminOrderController::class, 'finish'])->name('orders.finish');
             Route::post('/pesanan/{order}/ship', [AdminOrderController::class, 'ship'])->name('orders.ship');
+            Route::post('/pesanan/{order}/approve-transfer', [AdminOrderController::class, 'approveTransfer'])->name('orders.approveTransfer');
             Route::get('/pesanan/{order}/print-resi', [AdminOrderController::class, 'printResi'])->name('orders.printResi');
 
             // Modul
@@ -267,6 +269,10 @@ Route::prefix('transaksi-cod')->name('cod.')->group(function () {
         });
 
 });
+
+Route::post('/orders/{order}/upload-proof', [\App\Http\Controllers\OrderPaymentController::class, 'uploadProof'])
+    ->name('orders.uploadProof')
+    ->middleware('auth');
 
 // Profil (Breeze)
 Route::middleware('auth')->group(function () {

@@ -23,22 +23,29 @@
                         @foreach($cart as $id => $item)
                             <div class="flex gap-4 border-b pb-4">
 
-                                <input type="checkbox" name="selected_items[]" value="{{ $id }}" class="w-5 h-5 mt-6">
+                                <input type="checkbox" 
+                                id="item-{{ $id }}"
+                                name="selected_items[]" 
+                                value="{{ $id }}" 
+                                aria-label="Pilih {{ $item['nama'] }} untuk checkout"
+                                class="w-5 h-5 mt-6">
 
                                 <img src="{{ asset('storage/'.$item['foto']) }}"
-                                     class="w-20 h-20 rounded object-cover">
+                                alt="Foto {{ $item['nama'] }}"
+                                class="w-20 h-20 rounded object-cover">
 
                                 <div class="flex-1">
-                                    <p class="font-semibold">{{ $item['nama'] }}</p>
-                                    <p class="text-sm">{{ $item['qty'] }} × Rp {{ number_format($item['harga']) }}</p>
+                                <p class="font-semibold">{{ $item['nama'] }}</p>
+                                <p class="text-sm">{{ $item['qty'] }} × Rp {{ number_format($item['harga']) }}</p>
                                 </div>
 
                                 {{-- Button hapus --}}
                                 <button type="submit"
-                                        formaction="{{ route('cart.remove', $id) }}"
-                                        formmethod="POST"
-                                        class="text-red-500">
-                                    Hapus
+                                formaction="{{ route('cart.remove', $id) }}"
+                                formmethod="POST"
+                                aria-label="Hapus {{ $item['nama'] }} dari keranjang"
+                                class="text-red-500 hover:underline">
+                                Hapus
                                 </button>
                             </div>
                         @endforeach

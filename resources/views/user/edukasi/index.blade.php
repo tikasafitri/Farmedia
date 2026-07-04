@@ -50,9 +50,10 @@
 
                         {{-- Search Input --}}
                         <div>
-                            <label class="text-sm font-medium text-gray-500 dark:text-gray-300">Pencarian</label>
+                            <label for="search-input" class="text-sm font-medium text-gray-500 dark:text-gray-300">Pencarian</label>
                             <div class="relative mt-1">
                                 <input
+                                    id="search-input"
                                     x-model="q"
                                     @input.debounce.400ms="loadData()"
                                     type="text"
@@ -65,8 +66,9 @@
 
                         {{-- Kategori --}}
                         <div>
-                            <label class="text-sm font-medium text-gray-500 dark:text-gray-300">Kategori</label>
+                            <label for="filter-kategori" class="text-sm font-medium text-gray-500 dark:text-gray-300">Kategori</label>
                             <select
+                                id="filter-kategori"
                                 x-model="kategori"
                                 @change="loadData()"
                                 class="w-full rounded-xl mt-1 py-2.5 border border-emerald-200 dark:border-emerald-600 dark:bg-gray-900 dark:text-gray-200 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 text-sm"
@@ -81,8 +83,9 @@
 
                         {{-- Sort --}}
                         <div>
-                            <label class="text-sm font-medium text-gray-500 dark:text-gray-300">Urutkan</label>
+                            <label for="filter-sort" class="text-sm font-medium text-gray-500 dark:text-gray-300">Urutkan</label>
                             <select
+                                id="filter-sort"
                                 x-model="sort"
                                 @change="loadData()"
                                 class="w-full rounded-xl mt-1 py-2.5 border border-emerald-200 dark:border-emerald-600 dark:bg-gray-900 dark:text-gray-200 shadow-sm focus:ring-emerald-500 focus:border-emerald-500 text-sm"

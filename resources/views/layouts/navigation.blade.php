@@ -39,11 +39,12 @@
                     <span class="hidden sm:inline">Ikuti kami di:</span>
 
                     {{-- Instagram --}}
-                    <a href="https://www.instagram.com/farmedia2025" target="_blank" rel="noopener noreferrer"
-                       class="flex items-center justify-center w-6 h-6 rounded-full bg-white/10 hover:bg-white/20">
+                    <a href="https://www.instagram.com/farmedia2025?igsh=MXNwZXV4ZnIzankzZQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer"
+                    aria-label="Ikuti Farmedia di Instagram"
+                    class="flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition duration-150">
                         {{-- icon instagram sederhana --}}
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                             class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.7">
+                            class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7">
                             <rect x="4" y="4" width="16" height="16" rx="5" ry="5"></rect>
                             <circle cx="12" cy="12" r="3.2"></circle>
                             <circle cx="17" cy="7" r="1"></circle>
@@ -51,15 +52,16 @@
                     </a>
 
                     {{-- TikTok --}}
-                    <a href="https://www.tiktok.com" target="_blank"
-                       class="flex items-center justify-center w-6 h-6 rounded-full bg-white/10 hover:bg-white/20">
+                    <a href="https://www.tiktok.com/@farmedia2025?_r=1&_t=ZS-96Vvs4SCGCD" target="_blank" rel="noopener noreferrer"
+                    aria-label="Ikuti Farmedia di TikTok"
+                    class="flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition duration-150">
                         {{-- icon tiktok sederhana --}}
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                             class="w-3.5 h-3.5" fill="currentColor">
+                            class="w-5 h-5" fill="currentColor">
                             <path d="M16.75 7.5a4.5 4.5 0 0 0 3 1.12V11a6.1 6.1 0 0 1-3-.82v4.07A4.75 4.75 0 1 1 11 9.75v2.12a2.25 2.25 0 1 0 1.5 2.12V4.5h2.25v3z"/>
                         </svg>
                     </a>
-                </div>
+                    </div>
 
                 {{-- Notifikasi (hover untuk buka panel) --}}
                 <div class="flex items-center gap-4">
@@ -84,11 +86,10 @@
                         </button>
 
                         {{-- Panel notifikasi (REAL dari orders) --}}
-                        <div
-                            class="absolute right-0 mt-2 w-80 bg-white text-gray-800 rounded-lg shadow-xl py-2
-                                   opacity-0 pointer-events-none transform translate-y-2
-                                   group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0
-                                   transition duration-150 z-30">
+                        <div class="absolute right-0 mt-2 w-80 bg-white text-gray-800 rounded-lg shadow-xl py-2
+                                    opacity-0 pointer-events-none transform translate-y-2
+                                    group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0
+                                    transition duration-150 z-30">
 
                             <div class="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
                                 <span class="text-sm font-semibold">Notifikasi Pesanan</span>
@@ -185,6 +186,7 @@
                                     placeholder="Cari produk pertanian..."
                                     class="flex-1 px-4 py-2 text-sm text-gray-800 focus:outline-none">
                                 <button type="submit"
+                                        aria-label="Cari produk pertanian"
                                         class="px-4 flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
                                          fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -197,6 +199,7 @@
 
                         {{-- Keranjang di kanan search --}}
                         <a href="{{ route('user.cart.index') }}"
+                           aria-label="Buka Keranjang Belanja"
                            class="relative flex items-center justify-center ml-2">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                  class="h-7 w-7"
@@ -241,7 +244,6 @@
                 @else
                     {{-- === NAV ADMIN & MITRA – STRUKTUR ASLI === --}}
                     <div class="flex">
-                        <!-- Logo -->
                         <div class="shrink-0 flex items-center">
                             <a href="
                                 {{ Auth::user()->role === 'admin'
@@ -253,7 +255,6 @@
                             </a>
                         </div>
 
-                        <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                             @if(Auth::user()->role === 'admin')
                                 <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
@@ -294,16 +295,11 @@
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4
-                                   font-medium rounded-md text-emerald-900 bg-white/90 hover:bg-white
-                                   focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-emerald-900 bg-white/90 hover:bg-white focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                          clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
@@ -325,26 +321,19 @@
                 </x-dropdown>
             </div>
 
-            <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open"
-                        class="inline-flex items-center justify-center p-2 rounded-md text-white
-                               hover:bg-emerald-800 focus:outline-none focus:bg-emerald-800
-                               focus:text-white transition duration-150 ease-in-out">
+                        aria-label="Buka menu navigasi"
+                        class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-emerald-800 focus:outline-none focus:bg-emerald-800 focus:text-white transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden"
-                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu (mobile) -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white text-gray-800">
         <div class="pt-2 pb-3 space-y-1">
             @if(Auth::user()->role === 'admin')

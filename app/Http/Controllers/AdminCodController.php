@@ -124,7 +124,6 @@ class AdminCodController extends Controller
     ]);
 
     $order->update([
-        'komisi_lunas'    => true,
         'komisi_lunas_at' => now(),
     ]);
 

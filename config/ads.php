@@ -17,8 +17,8 @@ return [
 
     // Info rekening tujuan transfer (tampilan di halaman mitra)
     'bank' => [
-        'name'           => 'Riau Kepri Syariah (Perseroda)',
-        'account_name'   => 'PT. FARMEDIA',
-        'account_number' => '1083 1011 48',
+        'nama'   => env('PLATFORM_BANK_NAMA', 'RIAU KEPRI SYARIAH (PERSERODA)'),
+        'nomor'  => env('PLATFORM_BANK_NOMOR', '1083 1011 46'),
+        'pemilik'=> env('PLATFORM_BANK_PEMILIK', 'FARMEDIA'),
     ],
 ];

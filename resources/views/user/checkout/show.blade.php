@@ -69,7 +69,8 @@
                         <div class="flex items-start gap-4">
                             <div class="shrink-0">
                                 <img src="{{ asset('storage/' . $product->foto_produk) }}"
-                                     class="w-24 h-24 object-contain rounded-xl bg-gray-100 dark:bg-gray-800">
+                                    alt="Foto {{ $product->nama_produk }}"
+                                    class="w-24 h-24 object-contain rounded-xl bg-gray-100 dark:bg-gray-800">
                             </div>
                             <div class="flex-1 space-y-1">
                                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
@@ -83,9 +84,9 @@
                                 </p>
 
                                 <div class="mt-3">
-                                    <label class="text-xs font-medium text-gray-600 dark:text-gray-300">Jumlah</label>
+                                    <label for="jumlahInput" class="text-xs font-medium text-gray-600 dark:text-gray-300">Jumlah</label>
                                     <input type="number" id="jumlahInput" value="1" min="1" max="{{ $product->stok }}"
-                                           class="mt-1 w-24 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm">
+                                        class="mt-1 w-24 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm">
                                 </div>
                             </div>
                         </div>
@@ -102,7 +103,7 @@
 
                             <div class="space-y-4 text-sm">
                                 <div>
-                                    <label class="text-xs font-medium text-gray-500 dark:text-gray-300">
+                                    <label for="kurirSelect" class="text-xs font-medium text-gray-500 dark:text-gray-300">
                                         Pilih Kurir
                                     </label>
                                     <select id="kurirSelect"
@@ -110,27 +111,27 @@
                                         <option value="10000">Reguler (Rp 10.000)</option>
                                         <option value="20000">Express (Rp 20.000)</option>
                                         <option value="7000">Hemat (Rp 7.000)</option>
-                                    </select>
+                                    </select id="kurirSelect">
                                 </div>
 
                                 <div>
-                                    <label class="text-xs font-medium text-gray-500 dark:text-gray-300">
+                                    <label for="pengirimanSelect" class="text-xs font-medium text-gray-500 dark:text-gray-300">
                                         Metode Pengiriman
                                     </label>
                                     <select id="pengirimanSelect"
                                             class="mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
                                         <option value="delivery">Dikirim ke Alamat</option>
                                         <option value="pickup">Ambil di Toko</option>
-                                    </select>
+                                    </select id="pengirimanSelect">
                                 </div>
                             </div>
                         </div>
 
                         {{-- PEMBAYARAN --}}
                         <div class="border border-gray-100 dark:border-gray-700 rounded-xl p-4 sm:p-5 bg-white dark:bg-gray-900/70">
-                            <h3 class="font-semibold text-sm text-gray-800 dark:text-gray-100 mb-3">
+                            <label for="paymentSelect"><h3 class="font-semibold text-sm text-gray-800 dark:text-gray-100 mb-3">
                                 3. Metode Pembayaran
-                            </h3>
+                            </h3></label>
 
                             <select id="paymentSelect"
                                     class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 text-sm">
@@ -140,7 +141,6 @@
 
                                 {{-- Delivery + Pickup --}}
                                 <option value="transfer">Transfer Bank</option>
-                                <option value="qris">QRIS</option>
 
                                 {{-- Pickup Only --}}
                                 <option value="cash" class="pickup-only">Bayar di Toko (Cash)</option>
@@ -148,8 +148,8 @@
 
                             <p class="mt-3 text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
                                 Untuk <span class="font-semibold">Ambil di Toko</span>, kamu bisa memilih
-                                <span class="font-semibold">Cash</span>, Transfer, atau QRIS.  
-                                Untuk <span class="font-semibold">Dikirim</span>, kamu bisa memilih COD, Transfer, atau QRIS.
+                                <span class="font-semibold">Cash</span>, Transfer. 
+                                Untuk <span class="font-semibold">Dikirim</span>, kamu bisa memilih COD, Transfer.
                             </p>
                         </div>
 

@@ -13,14 +13,12 @@ class MitraCommissionPaymentController extends Controller
 {
     private function outstandingOrdersQuery(int $mitraId)
     {
-        return Order::query()
-            ->where('mitra_id', $mitraId)
-            ->where('status_order', 'selesai')
-            ->whereRaw('LOWER(metode_pembayaran) = ?', ['cash'])
-            ->whereIn('metode_pengiriman', ['pickup', 'ambil_di_toko'])
-            ->where(function ($q) {
-                $q->whereNull('komisi_lunas')->orWhere('komisi_lunas', false)->orWhere('komisi_lunas', 0);
-            });
+    return Order::query()
+        ->where('mitra_id', $mitraId)
+        ->where('status_order', 'selesai')
+        ->whereRaw('LOWER(metode_pembayaran) = ?', ['cash'])
+        ->whereIn('metode_pengiriman', ['pickup', 'ambil_di_toko'])
+        ->whereNull('komisi_lunas_at'); // ✅ ini
     }
 
     private function getOrCreateActiveInvoice(int $mitraId): ?CommissionInvoice

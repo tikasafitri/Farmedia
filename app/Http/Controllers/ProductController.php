@@ -243,4 +243,26 @@ class ProductController extends Controller
         'canReview'
     ));
 }
+public function show(Product $product)
+{
+    $user = Auth::user();
+
+    // MITRA → detail produk miliknya
+    if ($user && $user->role === 'mitra') {
+
+        if ((int) $user->mitra_id !== (int) $product->mitra_id) {
+            abort(403, 'Produk ini bukan milik Anda.');
+        }
+
+        return view('mitra.products.show', compact('product'));
+    }
+
+    // ADMIN → detail produk
+    if ($user && $user->role === 'admin') {
+        return view('admin.products.show', compact('product'));
+    }
+
+    // USER → pakai logic showUser
+    return $this->showUser($product);
+}
 }

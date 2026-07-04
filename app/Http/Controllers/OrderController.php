@@ -13,19 +13,18 @@ use App\Models\Mitra;
 class OrderController extends Controller
 {
     public function index()
-    {
-        // Ambil user yang sedang login
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        // Ambil semua pesanan milik user, urut terbaru
-        $orders = Order::with(['items.product'])
-            ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+    $orders = Order::query()
+        ->where('user_id', $user->id)
+        ->with(['items.product.mitra']) // ✅ penting
+        ->latest()
+        ->get();
 
-        // arahkan ke resources/views/user/orders/index.blade.php
-        return view('user.orders.index', compact('orders'));
-    }
+    return view('user.orders.index', compact('orders'));
+}
+
     public function show(Order $order)
 {
     // Pastikan ini pesanan milik user yang login

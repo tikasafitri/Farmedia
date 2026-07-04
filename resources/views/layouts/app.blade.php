@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta name="description" content="Farmedia adalah platform marketplace dan ekosistem digital terbaik untuk sektor pertanian, menyediakan pupuk, alat tani, dan produk berkualitas.">
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased">
@@ -212,7 +212,7 @@
       <span class="ml-auto text-emerald-900/60"
             :class="open ? 'rotate-180' : ''"
             style="transition: transform .2s;">
-        ▾
+          ▾
       </span>
   </button>
 
@@ -306,7 +306,7 @@
                                 {{ request()->routeIs('profile.edit') ? 'bg-emerald-500/80 text-white' : 'bg-emerald-200 text-emerald-800' }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M11.3 3.06a1 1 0 011.4 0l1.2 1.2a1 1 0 00.9.27l1.6-.3a1 1 0 011.1.58l.7 1.5a1 1 0 01-.2 1.1l-1 1a1 1 0 000 1.42l1 1a1 1 0 01.2 1.1l-.7 1.5a1 1 0 01-1.1.58l-1.6-.3a1 1 0 00-.9.27l-1.2 1.2a1 1 0 01-1.4 0l-1.2-1.2a1 1 0 00-.9-.27l-1.6.3a1 1 0 01-1.1-.58l-.7-1.5a1 1 0 01.2-1.1l1-1a1 1 0 000-1.42l-1-1a1 1 0 01-.2-1.1l.7-1.5a1 1 0 011.1-.58l1.6.3a1 1 0 00.9-.27l1.2-1.2z"/>
+                                          d="M11.3 3.06a1 1 0 011.4 0l1.2 1.2a1 1 0 00.9.27l1.6-.3a1 1 0 011.1 Levant.58l.7 1.5a1 1 0 01-.2 1.1l-1 1a1 1 0 000 1.42l1 1a1 1 0 01.2 1.1l-.7 1.5a1 1 0 01-1.1.58l-1.6-.3a1 1 0 00-.9.27l-1.2 1.2a1 1 0 01-1.4 0l-1.2-1.2a1 1 0 00-.9-.27l-1.6.3a1 1 0 01-1.1-.58l-.7-1.5a1 1 0 01.2-1.1l1-1a1 1 0 000-1.42l-1-1a1 1 0 01-.2-1.1l.7-1.5a1 1 0 011.1-.58l1.6.3a1 1 0 00.9-.27l1.2-1.2z"/>
                                     <circle cx="12" cy="12" r="3"/>
                                 </svg>
                             </span>

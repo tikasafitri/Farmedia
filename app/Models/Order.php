@@ -27,17 +27,18 @@ class Order extends Model
         'komisi_ongkir',
         'payment_status',
         'payment_deadline',
-        'komisi_lunas',
         'komisi_lunas_at',
         'selesai_at',
+        'payment_proof_path',
+        'paid_at',
     ];
 
     protected $casts = [
         // kalau sudah ada, tinggal tambahkan ini
         'payment_deadline' => 'datetime',
-        'komisi_lunas'     => 'boolean',
         'komisi_lunas_at'  => 'datetime',
         'selesai_at'       => 'datetime',
+        'paid_at' => 'datetime',
     ];
 
     public function user()

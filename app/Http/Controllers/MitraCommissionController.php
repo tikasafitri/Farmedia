@@ -81,7 +81,7 @@ class MitraCommissionController extends Controller
         $outstandingOrders = $allOrders->filter(function ($o) {
             $isPickup = in_array($o->metode_pengiriman, ['pickup', 'ambil_di_toko']);
             $isCash   = (strtolower((string) $o->metode_pembayaran) === 'cash');
-            $belumLunas = empty($o->komisi_lunas) || $o->komisi_lunas == false;
+            $belumLunas = is_null($o->komisi_lunas_at);
 
             return $isPickup && $isCash && $belumLunas;
         });

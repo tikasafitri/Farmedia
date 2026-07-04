@@ -31,7 +31,7 @@ class AdminCommissionController extends Controller
             $isPickup = in_array($shipping, ['pickup', 'ambil_di_toko']);
             $isCash   = ($payment === 'cash');
 
-            $belumLunas = empty($o->komisi_lunas) || $o->komisi_lunas == false;
+            $belumLunas = is_null($o->komisi_lunas_at);
 
             return $isPickup && $isCash && $belumLunas;
         });
@@ -92,7 +92,7 @@ class AdminCommissionController extends Controller
                     $isPickup = in_array($shipping, ['pickup', 'ambil_di_toko']);
                     $isCash   = ($payment === 'cash');
 
-                    $belumLunas = empty($o->komisi_lunas) || $o->komisi_lunas == false;
+                    $belumLunas = is_null($o->komisi_lunas_at);
 
                     return $isPickup && $isCash && $belumLunas;
                 })->sum(function ($o) {

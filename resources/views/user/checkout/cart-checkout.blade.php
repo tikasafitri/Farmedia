@@ -153,13 +153,12 @@
 
                                 <option value="cod">Bayar di Tempat (COD)</option>
                                 <option value="transfer">Transfer Bank</option>
-                                <option value="qris">QRIS</option>
                                 <option value="cash" class="pickup-only">Bayar di Toko (Cash)</option>
                             </select>
 
                             <p class="mt-3 text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
-                                Untuk <span class="font-semibold">Ambil di Toko</span>, gunakan Cash / Transfer / QRIS.  
-                                Untuk <span class="font-semibold">Dikirim</span>, gunakan COD / Transfer / QRIS.
+                                Untuk <span class="font-semibold">Ambil di Toko</span>, gunakan Cash / Transfer.  
+                                Untuk <span class="font-semibold">Dikirim</span>, gunakan COD / Transfer.
                             </p>
                         </div>
 

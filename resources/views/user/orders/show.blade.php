@@ -105,34 +105,35 @@
 
                         {{-- ========== INSTRUKSI PEMBAYARAN TRANSFER BANK ========== --}}
 @if($order->metode_pembayaran === 'transfer' && $order->payment_status === 'pending')
+    @php $bank = config('ads.bank'); @endphp
+
     <div class="mt-4 md:col-span-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800">
-        <p class="font-semibold mb-1">
-            Menunggu pembayaran via Transfer Bank
+        <p class="font-semibold mb-1">Menunggu pembayaran via Transfer Bank</p>
+
+        <p class="mb-1">
+            Silakan transfer sebesar
+            <span class="font-bold">Rp {{ number_format($order->total_harga, 0, ',', '.') }}</span>
+            ke rekening <b>PLATFORM</b> berikut:
         </p>
 
-        @php
-            $mitra = $order->mitra;
-        @endphp
+        <ul class="ml-4 list-disc mb-2">
+            <li>Bank: <b>{{ $bank['nama'] }}</b></li>
+            <li>No. Rekening: <b>{{ $bank['nomor'] }}</b></li>
+            <li>Atas Nama: <b>{{ $bank['pemilik'] }}</b></li>
+        </ul>
+        <form action="{{ route('orders.uploadProof', $order->id) }}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="mt-3">
+            @csrf
 
-        @if($mitra && $mitra->bank_nama && $mitra->bank_nomor)
-            <p class="mb-1">
-                Silakan transfer sebesar
-                <span class="font-bold">
-                    Rp {{ number_format($order->total_harga, 0, ',', '.') }}
-                </span>
-                ke rekening berikut:
-            </p>
+            <label class="block text-[11px] text-amber-700 mb-1">Upload bukti transfer</label>
+            <input type="file" name="payment_proof" required class="block w-full text-xs" />
 
-            <ul class="ml-4 list-disc mb-2">
-                <li>Bank: <b>{{ $mitra->bank_nama }}</b></li>
-                <li>No. Rekening: <b>{{ $mitra->bank_nomor }}</b></li>
-                <li>Atas Nama: <b>{{ $mitra->bank_pemilik ?? '-' }}</b></li>
-            </ul>
-        @else
-            <p class="mb-1">
-                Data rekening belum diatur. Silakan hubungi penjual untuk nomor rekening.
-            </p>
-        @endif
+            <button class="mt-2 px-4 py-2 rounded-full bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700">
+                Upload Bukti Transfer
+            </button>
+        </form>
 
         @if($order->payment_deadline)
             <p class="mb-1">
@@ -142,8 +143,7 @@
         @endif
 
         <p class="text-[11px] text-amber-700">
-            Setelah transfer, pembayaran akan dicek oleh penjual. Status akan berubah menjadi
-            <b>dibayar</b> setelah dikonfirmasi.
+            Setelah transfer, silakan upload bukti pembayaran. Pembayaran akan diverifikasi oleh admin.
         </p>
     </div>
 @endif

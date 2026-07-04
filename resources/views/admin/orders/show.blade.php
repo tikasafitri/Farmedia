@@ -24,6 +24,7 @@
                 {{ session('success') }}
             </div>
         @endif
+
         @if(session('error'))
             <div class="p-3 rounded-xl bg-red-50 text-red-700 text-sm border border-red-100">
                 {{ session('error') }}
@@ -32,6 +33,8 @@
 
         {{-- ACTIONS --}}
         <div class="bg-white rounded-2xl border border-emerald-50 p-4 flex flex-wrap gap-2 items-center">
+
+            {{-- Ship (Delivery + siap_dikirim) --}}
             @if($order->metode_pengiriman === 'delivery' && $order->status_order === 'siap_dikirim')
                 <form method="POST" action="{{ route('admin.orders.ship', $order->id) }}">
                     @csrf
@@ -41,6 +44,7 @@
                 </form>
             @endif
 
+            {{-- Print Resi --}}
             @if(!empty($order->nomor_resi))
                 <a href="{{ route('admin.orders.printResi', $order->id) }}"
                    class="px-4 py-2 rounded-xl bg-slate-800 text-white text-sm font-semibold hover:bg-slate-900">
@@ -48,6 +52,7 @@
                 </a>
             @endif
 
+            {{-- Finish (Delivery + dikirim) --}}
             @if($order->metode_pengiriman === 'delivery' && $order->status_order === 'dikirim')
                 <form method="POST" action="{{ route('admin.orders.finish', $order->id) }}">
                     @csrf
@@ -57,6 +62,47 @@
                 </form>
             @endif
 
+            {{-- ===== VERIFIKASI TRANSFER (ESCROW) ===== --}}
+            @if($order->metode_pembayaran === 'transfer')
+                <div class="w-full rounded-2xl border border-amber-200 bg-amber-50 p-4 mt-2">
+                    <p class="text-xs font-semibold text-amber-800">Pembayaran Transfer (Escrow)</p>
+
+                    <div class="mt-2 text-sm text-amber-900 space-y-1">
+                        <p>Status pembayaran: <b>{{ $order->payment_status ?? '-' }}</b></p>
+
+                        @if($order->payment_proof_path)
+                            <p>
+                                Bukti transfer:
+                                <a class="text-emerald-700 underline" target="_blank"
+                                   href="{{ asset('storage/' . $order->payment_proof_path) }}">
+                                    Lihat file
+                                </a>
+                            </p>
+                        @else
+                            <p class="text-xs text-amber-700">Belum ada bukti transfer.</p>
+                        @endif
+
+                        @if($order->paid_at)
+                            <p>Dibayar pada: <b>{{ $order->paid_at?->format('d M Y, H:i') }}</b></p>
+                        @endif
+                    </div>
+
+                    {{-- Tombol Approve hanya kalau waiting_verification --}}
+                    @if($order->payment_status === 'waiting_verification' && $order->payment_proof_path)
+                        <form method="POST"
+                              action="{{ route('admin.orders.approveTransfer', $order->id) }}"
+                              class="mt-3"
+                              onsubmit="return confirm('Setujui pembayaran transfer ini? Uang akan dicatat masuk ke escrow platform.');">
+                            @csrf
+                            <button class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
+                                Approve Transfer (Uang Masuk)
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            @endif
+
+            {{-- Back --}}
             <a href="{{ route('admin.orders.index') }}"
                class="ml-auto px-4 py-2 rounded-xl border text-sm font-semibold text-gray-700 hover:bg-gray-50">
                 Kembali

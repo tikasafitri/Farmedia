@@ -11,27 +11,32 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     public function register(Request $request)
-    {
-        $data = $request->validate([
-            'nama' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-        ]);
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:100',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6|confirmed',
+        'role' => 'nullable|in:user,mitra,admin',
+        'alamat_lengkap' => 'nullable|string|max:500',
+        'mitra_id' => 'nullable|integer|exists:mitras,id',
+    ]);
 
-        $user = User::create([
-            'nama' => $data['nama'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role' => 'buyer', // sesuaikan
-        ]);
+    $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'role' => $data['role'] ?? 'user',
+        'alamat_lengkap' => $data['alamat_lengkap'] ?? null,
+        'mitra_id' => $data['mitra_id'] ?? null,
+    ]);
 
-        $token = $user->createToken('android')->plainTextToken;
+    $token = $user->createToken('android')->plainTextToken;
 
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ], 201);
-    }
+    return response()->json([
+        'user' => $user,
+        'token' => $token,
+    ], 201);
+}
 
     public function login(Request $request)
     {
