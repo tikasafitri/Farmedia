@@ -1,36 +1,76 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Farmedia - Solusi Pertanian Modern</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+            }
+        </style>
     </head>
-    <body class="bg-gray-50 font-sans text-gray-900">
-        <nav class="bg-white shadow-md sticky top-0 z-50">
+    <body
+        class="bg-slate-50 font-sans text-slate-900 antialiased selection:bg-green-500 selection:text-white"
+    >
+        <div
+            class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 text-white text-center py-2 px-4 font-semibold text-xs md:text-sm tracking-wider shadow-md animate-pulse"
+        >
+            ✨ PIPELINE NOTIFICATION: Perubahan Kode Berhasil Di-deploy via
+            CI/CD Otomatis ke Server Vercel!
+        </div>
+
+        <nav
+            class="bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50 transition-all duration-300"
+        >
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center">
-                        <span class="text-2xl font-bold text-green-600"
-                            >FarMedia</span
+                <div class="flex justify-between h-20">
+                    <div class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md shadow-green-200"
                         >
+                            🌱
+                        </div>
+                        <span
+                            class="text-2xl font-extrabold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent tracking-tight"
+                        >
+                            FarMedia
+                        </span>
                     </div>
-                    <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-1 sm:space-x-4">
                         <a
                             href="#home"
-                            class="text-gray-700 hover:text-green-600 px-3 py-2 font-medium"
+                            class="text-slate-600 hover:text-green-600 px-3 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                             >Home</a
                         >
                         <a
                             href="#fitur"
-                            class="text-gray-700 hover:text-green-600 px-3 py-2 font-medium"
+                            class="text-slate-600 hover:text-green-600 px-3 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                             >Fitur</a
                         >
                         <a
                             href="#about"
-                            class="text-gray-700 hover:text-green-600 px-3 py-2 font-medium"
+                            class="text-slate-600 hover:text-green-600 px-3 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                             >Tentang Kami</a
                         >
+
+                        <div
+                            class="pl-2 border-l border-slate-200 ml-2 hidden sm:block"
+                        >
+                            <a
+                                href="#login"
+                                class="inline-flex items-center justify-center bg-slate-900 hover:bg-green-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md hover:shadow-green-100 transition-all duration-300 transform hover:-translate-y-0.5"
+                            >
+                                Masuk Akun
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,101 +78,231 @@
 
         <section
             id="home"
-            class="relative bg-green-600 py-32 text-white overflow-hidden"
+            class="relative bg-gradient-to-br from-green-700 via-green-600 to-emerald-800 py-32 md:py-40 text-white overflow-hidden"
         >
+            <div
+                class="absolute top-0 right-0 -mt-24 -mr-24 w-96 h-96 bg-green-500 rounded-full blur-3xl opacity-30"
+            ></div>
+            <div
+                class="absolute bottom-0 left-0 -mb-24 -ml-24 w-96 h-96 bg-emerald-400 rounded-full blur-3xl opacity-20"
+            ></div>
+
             <div
                 class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center"
             >
+                <span
+                    class="inline-flex items-center gap-1.5 py-1.5 px-3.5 rounded-full text-xs font-bold bg-white/10 text-green-100 mb-6 backdrop-blur-sm border border-white/10"
+                >
+                    <span
+                        class="size-2 inline-block rounded-full bg-emerald-400"
+                    ></span>
+                    Era Baru Pertanian Indonesia 4.0
+                </span>
+
                 <h1
-                    class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4"
+                    class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight max-w-5xl mx-auto drop-shadow-sm"
                 >
                     Pertanian Modern dalam Genggaman
                 </h1>
                 <p
-                    class="text-xl sm:text-2xl max-w-3xl mx-auto text-green-100 mb-8"
+                    class="text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto text-green-50/90 font-medium mb-10 leading-relaxed"
                 >
                     Platform Marketplace Terintegrasi untuk Petani Modern
                     Indonesia.
                 </p>
-                <div class="flex justify-center space-x-4">
+                <div
+                    class="flex flex-col sm:flex-row justify-center items-center gap-4"
+                >
                     <a
                         href="#fitur"
-                        class="bg-white text-green-600 font-bold px-8 py-3 rounded-lg shadow-lg hover:bg-green-50 transition"
+                        class="w-full sm:w-auto bg-white text-green-700 font-bold px-8 py-4 rounded-xl shadow-xl shadow-green-900/20 hover:bg-green-50 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 text-center"
                     >
-                        Lihat Fitur
+                        Lihat Fitur Ekosistem
+                    </a>
+                    <a
+                        href="#about"
+                        class="w-full sm:w-auto bg-transparent border-2 border-white/30 text-white font-bold px-8 py-4 rounded-xl hover:bg-white/10 hover:border-white transition-all duration-300 text-center"
+                    >
+                        Pelajari Selengkapnya
                     </a>
                 </div>
             </div>
+
             <div
-                class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"
+                class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px]"
             ></div>
         </section>
 
-        <section id="fitur" class="py-24 bg-white">
+        <section id="fitur" class="py-28 bg-slate-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
+                <div class="text-center mb-20 max-w-3xl mx-auto">
                     <h2
-                        class="text-3xl font-extrabold text-gray-900 sm:text-4xl"
+                        class="text-xs font-bold uppercase tracking-widest text-green-600 mb-3"
                     >
-                        Fitur Unggulan Farmedia
+                        Efisiensi & Inovasi
                     </h2>
-                    <p class="mt-4 text-xl text-gray-500">
+                    <h2
+                        class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight"
+                    >
+                        Fitur Utama Aplikasi
+                    </h2>
+                    <p
+                        class="mt-4 text-lg sm:text-xl text-slate-500 leading-relaxed"
+                    >
                         Dikembangkan dengan teknologi masa depan untuk kemudahan
                         akses tani.
                     </p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
                     <div
-                        class="p-8 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50 text-center"
+                        class="group relative p-8 md:p-10 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-slate-200/80 transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1.5"
                     >
-                        <div
-                            class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 font-bold text-xl"
-                        >
-                            🛒
+                        <div>
+                            <div
+                                class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-8 font-bold text-2xl group-hover:bg-green-600 group-hover:text-white transition-all duration-300 shadow-sm"
+                            >
+                                🛒
+                            </div>
+                            <h3
+                                class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-green-600 transition-colors duration-200"
+                            >
+                                Marketplace Tani
+                            </h3>
+                            <p class="text-slate-600 leading-relaxed">
+                                Jual beli hasil panen langsung dari petani ke
+                                konsumen tanpa perantara.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Marketplace Tani</h3>
-                        <p class="text-gray-600">
-                            Jual beli hasil panen langsung dari petani ke
-                            konsumen tanpa perantara.
-                        </p>
+                        <div
+                            class="mt-8 pt-4 border-t border-slate-50 flex items-center text-sm font-bold text-green-600 gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        >
+                            Buka Pasar &rarr;
+                        </div>
                     </div>
+
                     <div
-                        class="p-8 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50 text-center"
+                        class="group relative p-8 md:p-10 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-slate-200/80 transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1.5精密"
                     >
-                        <div
-                            class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 font-bold text-xl"
-                        >
-                            🤖
+                        <div>
+                            <div
+                                class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-8 font-bold text-2xl group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm"
+                            >
+                                🤖
+                            </div>
+                            <h3
+                                class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors duration-200"
+                            >
+                                Machine Learning
+                            </h3>
+                            <p class="text-slate-600 leading-relaxed">
+                                Rekomendasi harga pasar otomatis untuk mencegah
+                                kerugian akibat tengkulak.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Machine Learning</h3>
-                        <p class="text-gray-600">
-                            Rekomendasi harga pasar otomatis untuk mencegah
-                            kerugian tengkulak.
-                        </p>
+                        <div
+                            class="mt-8 pt-4 border-t border-slate-50 flex items-center text-sm font-bold text-emerald-600 gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        >
+                            Cek Prediksi Harga &rarr;
+                        </div>
                     </div>
+
                     <div
-                        class="p-8 border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition bg-gray-50 text-center"
+                        class="group relative p-8 md:p-10 bg-white border border-slate-100 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-slate-200/80 transition-all duration-300 flex flex-col justify-between transform hover:-translate-y-1.5"
                     >
-                        <div
-                            class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 font-bold text-xl"
-                        >
-                            ⚡
+                        <div>
+                            <div
+                                class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-8 font-bold text-2xl group-hover:bg-amber-600 group-hover:text-white transition-all duration-300 shadow-sm"
+                            >
+                                ⚡
+                            </div>
+                            <h3
+                                class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors duration-200"
+                            >
+                                Akses Instan
+                            </h3>
+                            <p class="text-slate-600 leading-relaxed">
+                                Sistem web statis ultra-cepat yang hemat kuota
+                                internet dan memori perangkat.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Akses Cepat</h3>
-                        <p class="text-gray-600">
-                            Sistem web statis ultra-cepat yang hemat kuota dan
-                            memori gadget.
-                        </p>
+                        <div
+                            class="mt-8 pt-4 border-t border-slate-50 flex items-center text-sm font-bold text-amber-600 gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        >
+                            Uji Kecepatan &rarr;
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <footer class="bg-gray-900 text-gray-400 py-12 text-center">
-            <p>
-                &copy; 2026 Farmedia Project. Dibuat untuk Praktikum MPPL /
-                Rekayasa Perangkat Lunak.
-            </p>
+        <section id="about" class="py-24 bg-white border-t border-slate-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div
+                    class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+                >
+                    <div>
+                        <span
+                            class="text-xs font-bold uppercase tracking-widest text-green-600 block mb-3"
+                            >Misi Utama Kami</span
+                        >
+                        <h2
+                            class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-6"
+                        >
+                            Menghubungkan Sektor Hulu hingga Hilir Komoditas
+                            Tani
+                        </h2>
+                        <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                            Farmedia hadir sebagai inkubator solusi teknologi
+                            agrikultur terintegrasi yang berdedikasi tinggi
+                            membantu menyejahterakan para pahlawan pangan
+                            nasional melalui penyediaan data pasar yang
+                            transparan dan rantai pasok pintar.
+                        </p>
+                    </div>
+                    <div
+                        class="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-3xl border border-green-100/50 relative overflow-hidden"
+                    >
+                        <div
+                            class="absolute -bottom-10 -right-10 w-40 h-40 bg-green-200/30 rounded-full blur-2xl"
+                        ></div>
+                        <h4
+                            class="font-bold text-slate-900 mb-4 text-lg flex items-center gap-2"
+                        >
+                            <span>📊</span> Status Validasi Infrastruktur
+                        </h4>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li class="flex items-center gap-2">
+                                <span class="text-green-600">✓</span> Pipa
+                                Continuous Integration Berjalan Lancar
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-green-600">✓</span> Pipa
+                                Continuous Deployment Tersinkron Daring
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-green-600">✓</span> Serverless
+                                Hosting Kompilasi Sempurna
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer
+            class="bg-slate-950 text-slate-400 py-12 border-t border-slate-900 text-center"
+        >
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-sm tracking-wide">
+                    &copy; 2026 Farmedia Project. Dibuat untuk Praktikum MPPL /
+                    Rekayasa Perangkat Lunak.
+                </p>
+                <p class="text-xs text-slate-600 mt-2">
+                    Infrastruktur Terotomatisasi &bull; Berbasis Git Versioning
+                    &bull; Tersedia Global via Cloud
+                </p>
+            </div>
         </footer>
     </body>
 </html>
