@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Farmedia - Solusi Pertanian Modern</title>
+        <!-- Tailwind CSS & Google Fonts Inter -->
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,6 +21,7 @@
     <body
         class="bg-slate-50 font-sans text-slate-900 antialiased selection:bg-green-500 selection:text-white"
     >
+        <!-- FITUR LIVE TEST PIPELINE: BANNER NOTIFIKASI INDIKATOR CI/CD -->
         <div
             class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 text-white text-center py-2 px-4 font-semibold text-xs md:text-sm tracking-wider shadow-md animate-pulse"
         >
@@ -27,6 +29,7 @@
             CI/CD Otomatis ke Server Vercel!
         </div>
 
+        <!-- STICKY NAVIGATION BAR -->
         <nav
             class="bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-100 sticky top-0 z-50 transition-all duration-300"
         >
@@ -56,6 +59,11 @@
                             >Fitur</a
                         >
                         <a
+                            href="#statistik"
+                            class="text-slate-600 hover:text-green-600 px-3 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
+                            >Statistik</a
+                        >
+                        <a
                             href="#about"
                             class="text-slate-600 hover:text-green-600 px-3 py-2 rounded-lg text-sm font-semibold transition-colors duration-200"
                             >Tentang Kami</a
@@ -76,6 +84,7 @@
             </div>
         </nav>
 
+        <!-- HERO SECTION -->
         <section
             id="home"
             class="relative bg-gradient-to-br from-green-700 via-green-600 to-emerald-800 py-32 md:py-40 text-white overflow-hidden"
@@ -127,12 +136,12 @@
                     </a>
                 </div>
             </div>
-
             <div
                 class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:24px_24px]"
             ></div>
         </section>
 
+        <!-- FITUR SECTION -->
         <section id="fitur" class="py-28 bg-slate-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-20 max-w-3xl mx-auto">
@@ -236,6 +245,91 @@
             </div>
         </section>
 
+        <!-- FITUR BARU: SECTION STATISTIK (DITAMBAHKAN UNTUK BAHAN UJI RE-DEPLOY) -->
+        <section
+            id="statistik"
+            class="py-24 bg-slate-900 text-white relative overflow-hidden"
+        >
+            <div
+                class="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:20px_20px]"
+            ></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2
+                        class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-3"
+                    >
+                        Pencapaian Ekosistem
+                    </h2>
+                    <p
+                        class="text-3xl sm:text-4xl font-extrabold tracking-tight"
+                    >
+                        Dampak Nyata Komoditas Farmedia
+                    </p>
+                </div>
+
+                <!-- Grid Statistik Angka -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div
+                        class="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
+                    >
+                        <div
+                            class="text-3xl sm:text-5xl font-extrabold text-emerald-400 mb-2"
+                        >
+                            15,000+
+                        </div>
+                        <p
+                            class="text-xs sm:text-sm text-slate-400 font-medium uppercase tracking-wider"
+                        >
+                            Petani Terdaftar
+                        </p>
+                    </div>
+                    <div
+                        class="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
+                    >
+                        <div
+                            class="text-3xl sm:text-5xl font-extrabold text-emerald-400 mb-2"
+                        >
+                            350 Ton
+                        </div>
+                        <p
+                            class="text-xs sm:text-sm text-slate-400 font-medium uppercase tracking-wider"
+                        >
+                            Hasil Panen Terjual
+                        </p>
+                    </div>
+                    <div
+                        class="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
+                    >
+                        <div
+                            class="text-3xl sm:text-5xl font-extrabold text-emerald-400 mb-2"
+                        >
+                            Rp 4.2M+
+                        </div>
+                        <p
+                            class="text-xs sm:text-sm text-slate-400 font-medium uppercase tracking-wider"
+                        >
+                            Total Transaksi
+                        </p>
+                    </div>
+                    <div
+                        class="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
+                    >
+                        <div
+                            class="text-3xl sm:text-5xl font-extrabold text-emerald-400 mb-2"
+                        >
+                            99.4%
+                        </div>
+                        <p
+                            class="text-xs sm:text-sm text-slate-400 font-medium uppercase tracking-wider"
+                        >
+                            Akurasi Machine Learning
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT US SECTION -->
         <section id="about" class="py-24 bg-white border-t border-slate-100">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div
@@ -290,6 +384,7 @@
             </div>
         </section>
 
+        <!-- MODERN PREMIUM FOOTER -->
         <footer
             class="bg-slate-950 text-slate-400 py-12 border-t border-slate-900 text-center"
         >
